@@ -14,16 +14,16 @@ export class UserRepository extends Repository<User> {
 
     const user = new User();
     user.username = username;
-    // save a salt for hashing
-    const salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, salt);
+
+    user.salt = await bcrypt.genSalt();
+    user.password = await this.hashPassword(password, user.salt);
 
     try {
       await user.save();
     } catch (error) {
       console.log(error);
       if (error.code === '23505') {
-        throw new ConflictException('Username already exists');
+        throw new ConflictException('Username a lready exists');
       } else {
         throw new InternalServerErrorException();
       }
