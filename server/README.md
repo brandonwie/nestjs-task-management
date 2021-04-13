@@ -1,3 +1,37 @@
+# Task Manager - Backend with NestJS
+
+## Structure
+
+- AppModule
+
+  - TypeOrmModule (forRoot: TypeOrmConfig)
+  - AuthModule
+  - TasksModule
+
+- Auth - User entity
+
+  - AuthModule
+
+    - imports: [PassportModule, JwtModule, TypeOrmModule (forFeature: UserRepository)]
+    - controllers : [AuthController]
+    - providers: [AuthService, JwtStrategy]
+    - exports: [JwtStrategy, PassportModule]
+
+  - DTO
+    - AuthCredentialsDto: `username`, `password`
+
+Repository is TypeORM feature.
+
+- Tasks - Task entity
+  - TasksModule
+    - imports: [TypeOrmModule (forFeature: TaskRepository), AuthModule]
+    - controllers: [TaskController]
+    - providers: [TasksService]
+  - DTO
+    - CreateTaskDto: `title`, `description`
+    - getTasksFilterDto: `status`, `search`
+
+<!-- below is the basic README content from Nest.js -->
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
