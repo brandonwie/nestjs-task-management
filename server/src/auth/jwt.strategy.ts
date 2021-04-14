@@ -8,6 +8,7 @@ import { UserRepository } from './user.repository';
 import * as config from 'config';
 
 const jwtConfig = config.get('jwt');
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -16,7 +17,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_SECRET || jwtConfig.secret,
+      secretOrKey:
+        process.env.NODE_ENV === 'development'
+          ? jwtConfig.secret
+          : process.env.JWT_SECRET,
     });
   }
 

@@ -2,13 +2,12 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as config from 'config';
 
 const dbConfig = config.get('db');
-
 /**
  * RDS: Relation Database Service
  * process.env.RDS_*: for AWS connection
  */
 export const typeOrmConfig: TypeOrmModuleOptions = {
-  type: dbConfig.type,
+  type: config.get('db.type'),
   host: process.env.RDS_HOSTNAME || dbConfig.host,
   port: process.env.RDS_PORT || dbConfig.port,
   username: process.env.RDS_USERNAME || dbConfig.username,

@@ -5,7 +5,7 @@ import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskRepository } from './task.repository';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
-import { User } from 'src/auth/user.entity';
+import { User } from '../auth/user.entity';
 
 @Injectable()
 export class TasksService {
@@ -14,6 +14,12 @@ export class TasksService {
     private taskRepository: TaskRepository,
   ) {}
 
+  /**
+   *
+   * @param filterDto
+   * @param user
+   * @returns Task[]
+   */
   async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     return this.taskRepository.getTasks(filterDto, user);
   }

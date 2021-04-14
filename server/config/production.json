@@ -1,0 +1,8 @@
+{
+  "server": {
+    "origin": "http://nestjs-taskmanager-frontend01.s3-website-ap-southeast-1.amazonaws.com"
+  },
+  "db": {
+    "synchronize": false
+  }
+}
