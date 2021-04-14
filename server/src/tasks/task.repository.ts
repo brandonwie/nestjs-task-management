@@ -14,17 +14,19 @@ export class TaskRepository extends Repository<Task> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('task');
 
-    query.where('task.userId = :userId', { userId: user.id });
+    query.where('task.userId = :id', { id: user.id });
 
     if (status) {
+      console.log('status exist');
       query.andWhere('task.status = :status', {
         status,
       });
     }
 
     if (search) {
+      //! NEED TO BE EXTRA CAREFUL WITH PARENTHESIS
       query.andWhere(
-        'task.title LIKE :search OR task.description LIKE :search',
+        '(task.title LIKE :search OR task.description LIKE :search)',
         { search: `%${search}%` },
       );
     }
