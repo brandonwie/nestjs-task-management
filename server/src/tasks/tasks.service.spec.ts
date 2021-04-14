@@ -43,30 +43,6 @@ describe('TasksService', () => {
       const result = await tasksService.getTasks(filters, mockUserA);
       expect(result).toEqual('someValue');
     });
-
-    it('gets tasks only belong to the user', async () => {
-      const mockTaskA = {
-        id: 14,
-        username: 'userA',
-        title: 'task for A',
-        description: 'testing for A',
-        status: TaskStatus.OPEN,
-      };
-      // const mockTaskB = {
-      //   title: 'task for B',
-      //   description: 'desc of the task for B',
-      //   status: TaskStatus.OPEN,
-      // };
-
-      taskRepository.getTasks.mockResolvedValue(mockTaskA);
-
-      const filters: GetTasksFilterDto = {
-        search: 'not have been tasted',
-        status: TaskStatus.OPEN,
-      };
-      const result = await tasksService.getTasks(filters, mockUserB);
-      expect(result).toEqual([]);
-    });
   });
 
   describe('getTaskById', () => {
@@ -95,6 +71,20 @@ describe('TasksService', () => {
       expect(tasksService.getTaskById(1, mockUserA)).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('createTask', () => {
+    it('calls taskRepository.create() and returns the result', async () => {
+      taskRepository.createTask.mockResolvedValue('someTask');
+      expect(taskRepository.createTask).not.toHaveBeenCalled();
+      const createTaskDto = { title: 'test task', description: 'test desc' };
+      const result = await tasksService.createTask(createTaskDto, mockUserB);
+      expect(taskRepository.createTask).toHaveBeenCalledWith(
+        createTaskDto,
+        mockUserB,
+      );
+      expect(result).toEqual('someTask');
     });
   });
 });
