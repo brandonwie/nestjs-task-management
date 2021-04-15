@@ -12,16 +12,21 @@ export class UserRepository extends Repository<User> {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
-    const user = new User();
+    // "user = new User();" was not testable
+    const user = this.create();
     user.username = username;
 
-    user.salt = await bcrypt.genSalt();
+    await bcrypt
+      .genSalt()
+      .then((generatedSalt) => {
+        user.salt = generatedSalt;
+      })
+      .catch((err) => console.log(err));
     user.password = await this.hashPassword(password, user.salt);
 
     try {
       await user.save();
     } catch (error) {
-      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException('Username a lready exists');
       } else {
